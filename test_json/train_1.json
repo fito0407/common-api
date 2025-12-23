@@ -1,0 +1,15 @@
+{
+    "document_id": "train_1",
+    "text": "Peter Blackburn",
+    "entities": [
+        {
+            "entity_type": "PERSON",
+            "word": "PETER BLACKBURN"
+        }
+    ],
+    "engine": "deepseek-api",
+    "model": "deepseek-chat",
+    "system_fingerprint": "fp_eaab8d114b_prod0820_fp8_kvcache",
+    "date_init": "2025-12-23T14:45:09.984Z",
+    "date_end": "2025-12-23T14:45:12.391Z"
+}

@@ -1,0 +1,23 @@
+{
+	"document_id": "train_0",
+	"text": "EU rejects German call to boycott British lamb .",
+	"entities": [
+		{
+			"entity_type": "ORGANIZATION",
+			"word": "EU"
+		},
+		{
+			"entity_type": "LOCATION",
+			"word": "GERMAN"
+		},
+		{
+			"entity_type": "LOCATION",
+			"word": "BRITISH"
+		}
+	],
+	"engine": "deepseek-api",
+	"model": "deepseek-chat",
+	"system_fingerprint": "fp_eaab8d114b_prod0820_fp8_kvcache",
+	"date_init": "2025-12-23T14:34:29.967Z",
+	"date_end": "2025-12-23T14:34:34.386Z"
+}
