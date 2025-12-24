@@ -8,6 +8,10 @@ def get_now_utc():
     answer= utc_now.isoformat(timespec='milliseconds').replace('+00:00', 'Z')
     return  answer
 
+def get_now_utcfilenamesafe():
+    answer = get_now_utc().replace(":", "_").replace(".", "_")
+    return  answer
+
 def get_dataframe_from_jsons(directory_path):
     all_data = []
     for filename in os.listdir(directory_path):
