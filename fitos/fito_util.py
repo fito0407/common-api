@@ -22,3 +22,11 @@ def get_dataframe_from_jsons(directory_path):
                 all_data.append(data)
     answer = pd.DataFrame(all_data)
     return answer
+
+def get_date_from_utc_iso86001string(value):
+    answer= datetime.fromisoformat(value.replace('Z', '+00:00'))
+    return answer
+
+def get_elapsed_milliseconds(dt_end, dt_init):
+    answer= (dt_end - dt_init).total_seconds() * 1000
+    return answer
