@@ -1,12 +1,20 @@
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import os
 import json
 import pandas as pd
 
 def get_now_utc():
     utc_now = datetime.now(timezone.utc)
-    answer= utc_now.isoformat(timespec='milliseconds').replace('+00:00', 'Z')
-    return  answer
+    answer = convert_date_to_utc_iso86001string(utc_now)
+    return answer
+
+def get_now_utc_x_days_back(days: int):
+    target_date = datetime.now(timezone.utc) - timedelta(days=days)
+    answer= convert_date_to_utc_iso86001string(target_date)
+    return answer
+
+def convert_date_to_utc_iso86001string(target_date):
+    return target_date.isoformat(timespec='milliseconds').replace('+00:00', 'Z')
 
 def get_now_utcfilenamesafe():
     answer = get_now_utc().replace(":", "_").replace(".", "_")
