@@ -14,6 +14,7 @@ def clustering_to_labels(clustering, element_order):
 
 def ari_clusterings(clustering_true, clustering_pred, element_order):
 
+    #no element in element_order can be duplicated
     grouped_elements = (pd.DataFrame({'element': element_order})
                         .groupby('element')
                         .agg(number=('element', 'count'))
@@ -22,6 +23,13 @@ def ari_clusterings(clustering_true, clustering_pred, element_order):
     if clusters_with_multiple >0:
         duplicates = grouped_elements[grouped_elements['number'] > 1]['element'].tolist()
         raise ValueError(f'element_order cannot have repeated elements. Duplicates found: {duplicates}')
+
+    #every element in clustering_true must be in element_order
+    domain = {item: False for item in element_order}
+    all_elements = [item for sublist in clustering_true for item in sublist]
+    elements_not_in_domain = set([item for item in all_elements if item not in domain])
+    if elements_not_in_domain:
+        raise ValueError(f"Found elements not in domain: {elements_not_in_domain}")
 
     labels_true = clustering_to_labels(clustering_true, element_order)
     labels_pred = clustering_to_labels(clustering_pred, element_order)

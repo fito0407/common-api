@@ -8,10 +8,13 @@ import fitos.fito_ml as fm
 #df_files= fu.get_dataframe_from_jsons('test_json')
 #a=df_files
 
+short_element_order = ['A', 'B', 'C', 'D', 'E']
+extended_element_order = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
 element_order = ['A', 'B', 'C', 'D', 'E', 'F']
 wrong_element_order = ['A', 'B', 'C', 'D', 'E', 'F', 'F']
 
-clustering1 = [['A', 'B', 'C'], ['D'], ['E', 'F']]
-clustering2 = [['A', 'B'], ['C', 'D'], ['E', 'F']]
-ari= fm.ari_clusterings(clustering1, clustering2, element_order)
+clustering_true = [['A', 'B', 'C'], ['D'], ['E', 'F']]
+clustering_pred = [['A', 'B'], ['C', 'D'], ['E', 'F']]
+
+ari= fm.ari_clusterings(clustering_true, clustering_pred, short_element_order)
 print(f"Adjusted Rand Index (vs ground truth): {ari:.3f}")
