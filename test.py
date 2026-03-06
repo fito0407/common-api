@@ -17,8 +17,15 @@ clustering_true = [['B', 'A', 'C'], ['D'], ['E', 'F']]
 duplicated_clustering_true = [['B', 'A', 'C'], ['D'], ['E', 'F', 'A']]
 
 clustering_pred = [['A', 'B'], ['C', 'D'], ['E', 'F']]
+short_clustering_pred = [['A', 'B'], ['C', 'D'], ['E']]
 duplicated_clustering_pred = [['A', 'B', 'F'], ['C', 'D'], ['E', 'F']]
 
 
 ari= fm.ari_clusterings(clustering_true, clustering_pred, good_order)
-print(f"Adjusted Rand Index (vs ground truth): {ari:.3f}")
+print(f"01. Adjusted Rand Index (vs ground truth): {ari:.3f}")
+
+ari= fm.ari_clusterings_replenish_pred(clustering_true, clustering_pred, good_order)
+print(f"02. Adjusted Rand Index (vs ground truth): {ari:.3f}")
+
+ari= fm.ari_clusterings_replenish_pred(clustering_true, short_clustering_pred, good_order)
+print(f"03. Adjusted Rand Index (vs ground truth): {ari:.3f}")

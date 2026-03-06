@@ -17,7 +17,34 @@ def ari_clusterings(clustering_true, clustering_pred, element_order):
     is_valid, message_validation= _validate_for_ari_clusterings(clustering_true, clustering_pred, element_order)
     if not is_valid:
         raise ValueError(message_validation)
+    answer = _ari_clusterings(clustering_true, clustering_pred, element_order)
+    return answer
 
+def ari_clusterings_replenish_pred(clustering_true, clustering_pred, element_order):
+    is_valid, message_validation= _validate_for_ari_clusterings(clustering_true, clustering_pred, element_order)
+    if not is_valid:
+        raise ValueError(message_validation)
+
+    transformed_clustering_pred = []
+    domain = {item: False for item in element_order}
+
+    for cluster in clustering_pred:
+        new_cluster = []
+        for entity in cluster:
+            if entity in domain:
+                domain[entity]= True
+                new_cluster.append(entity)
+        transformed_clustering_pred.append(new_cluster)
+
+    for key in domain:
+        if not domain[key]:
+            transformed_clustering_pred.append([key])
+
+    answer = _ari_clusterings(clustering_true, transformed_clustering_pred, element_order)
+    return answer
+
+
+def _ari_clusterings(clustering_true, clustering_pred, element_order):
     labels_true = clustering_to_labels(clustering_true, element_order)
     labels_pred = clustering_to_labels(clustering_pred, element_order)
     answer = metrics.adjusted_rand_score(labels_true= labels_true, labels_pred= labels_pred)
@@ -45,7 +72,6 @@ def _validate_for_ari_clusterings(clustering_true, clustering_pred, element_orde
         return False, f'clustering_true and element_order must have the same items'
 
     return True, ''
-
 
 def _validate_duplicates(list_elements):
     counts = Counter(list_elements)
