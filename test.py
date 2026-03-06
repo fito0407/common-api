@@ -11,10 +11,10 @@ import fitos.fito_ml as fm
 short_element_order = ['A', 'B', 'C', 'D', 'E']
 extended_element_order = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
 element_order = ['A', 'B', 'C', 'D', 'E', 'F']
-wrong_element_order = ['A', 'B', 'C', 'D', 'E', 'F', 'F']
+duplicated_element_order = ['A', 'B', 'C', 'D', 'E', 'F', 'F']
 
-clustering_true = [['A', 'B', 'C'], ['D'], ['E', 'F']]
+clustering_true = [['B', 'A', 'C'], ['D'], ['E', 'F']]
 clustering_pred = [['A', 'B'], ['C', 'D'], ['E', 'F']]
 
-ari= fm.ari_clusterings(clustering_true, clustering_pred, short_element_order)
+ari= fm.ari_clusterings(clustering_true, clustering_pred, element_order)
 print(f"Adjusted Rand Index (vs ground truth): {ari:.3f}")
