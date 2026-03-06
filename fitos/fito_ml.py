@@ -13,8 +13,6 @@ def clustering_to_labels(clustering, element_order):
     return answer
 
 def ari_clusterings(clustering_true, clustering_pred, element_order):
-    element_order_to_validate = sorted(element_order)
-
     is_valid, message_validation= _validate_for_ari_clusterings(clustering_true, clustering_pred, element_order)
     if not is_valid:
         raise ValueError(message_validation)
@@ -23,7 +21,6 @@ def ari_clusterings(clustering_true, clustering_pred, element_order):
     labels_pred = clustering_to_labels(clustering_pred, element_order)
     answer = metrics.adjusted_rand_score(labels_true= labels_true, labels_pred= labels_pred)
     return answer
-
 
 def _validate_for_ari_clusterings(clustering_true, clustering_pred, element_order):
     answer= True, ''
