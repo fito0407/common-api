@@ -1,5 +1,6 @@
 from sklearn import metrics
 import pandas as pd
+from collections import Counter
 
 def clustering_to_labels(clustering, element_order):
     element_to_cluster = {}
@@ -23,22 +24,33 @@ def ari_clusterings(clustering_true, clustering_pred, element_order):
     return answer
 
 def _validate_for_ari_clusterings(clustering_true, clustering_pred, element_order):
-    answer= True, ''
-
-    element_order_to_validate = sorted(element_order)
-
-    #no element in element_order can be duplicated
-    grouped_elements = (pd.DataFrame({'element': element_order_to_validate})
-                        .groupby('element')
-                        .agg(number=('element', 'count'))
-                        .reset_index())
-    clusters_with_multiple = len(grouped_elements[grouped_elements['number'] > 1])
-    if clusters_with_multiple >0:
-        duplicates = grouped_elements[grouped_elements['number'] > 1]['element'].tolist()
-        answer = False, f'element_order cannot have repeated elements. Duplicates found: {duplicates}'
 
     all_elements_in_clustering_true = sorted([item for sublist in clustering_true for item in sublist])
-    if element_order_to_validate != all_elements_in_clustering_true:
-        answer = False, f'clustering_true and element_order must have the same items'
+    all_elements_in_clustering_pred = sorted([item for sublist in clustering_pred for item in sublist])
+    domain = sorted(element_order)
 
-    return answer
+    is_valid, message_validation = _validate_duplicates(all_elements_in_clustering_true)
+    if not is_valid:
+        return is_valid, message_validation
+
+    is_valid, message_validation = _validate_duplicates(all_elements_in_clustering_pred)
+    if not is_valid:
+        return is_valid, message_validation
+
+    is_valid, message_validation= _validate_duplicates(domain)
+    if not is_valid:
+        return is_valid, message_validation
+
+    if domain != all_elements_in_clustering_true:
+        return False, f'clustering_true and element_order must have the same items'
+
+    return True, ''
+
+
+def _validate_duplicates(list_elements):
+    counts = Counter(list_elements)
+    duplicates = [item for item, count in counts.items() if count > 1]
+    if duplicates:
+        return False, f'Cannot have repeated elements. Duplicates found: {duplicates}'
+
+    return True, ''
