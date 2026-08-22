@@ -46,3 +46,6 @@ def save_list_of_dicts_by_index(data_list, folder_name):
         filepath = os.path.join(folder_name, filename)
         with open(filepath, 'w', encoding='utf-8') as f:
             json.dump(data_dict, f, ensure_ascii=False, indent=4)
+
+def chunk(items, size):
+    return [items[i:i + size] for i in range(0, len(items), size)]
