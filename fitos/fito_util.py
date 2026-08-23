@@ -2,6 +2,8 @@ from datetime import datetime, timezone, timedelta
 import os
 import json
 import pandas as pd
+from html.parser import HTMLParser
+import re
 
 def get_now_utc():
     utc_now = datetime.now(timezone.utc)
@@ -49,3 +51,44 @@ def save_list_of_dicts_by_index(data_list, folder_name):
 
 def chunk(items, size):
     return [items[i:i + size] for i in range(0, len(items), size)]
+
+class HTMLToText(HTMLParser):
+    # Block-level tags become a line break so words either side don't run
+    # together (e.g. "<p>Java</p><p>SQL</p>" -> "Java\nSQL", not "JavaSQL").
+    _BLOCK_TAGS = {
+        'p', 'br', 'div', 'li', 'ul', 'ol', 'tr', 'table', 'section',
+        'article', 'header', 'footer', 'blockquote',
+        'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    }
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)  # decodes &amp; &nbsp; etc.
+        self._parts = []
+
+    def handle_data(self, data):
+        self._parts.append(data)
+
+    def handle_starttag(self, tag, attrs):
+        if tag in self._BLOCK_TAGS:
+            self._parts.append('\n')
+
+    def handle_endtag(self, tag):
+        if tag in self._BLOCK_TAGS:
+            self._parts.append('\n')
+
+    def get_text(self):
+        return ''.join(self._parts)
+
+def clean_html(text):
+    # Strip HTML tags and decode entities from a document's text. Returns the
+    # input unchanged when it is empty/None so missing descriptions stay missing.
+    if not text:
+        return text
+    parser = HTMLToText()
+    parser.feed(text)
+    parser.close()
+    cleaned = parser.get_text()
+    cleaned = re.sub(r'[^\S\n]+', ' ', cleaned)   # collapse spaces/tabs, keep \n
+    cleaned = re.sub(r' *\n *', '\n', cleaned)     # trim spaces around newlines
+    cleaned = re.sub(r'\n{2,}', '\n', cleaned)     # collapse blank lines
+    return cleaned.strip()

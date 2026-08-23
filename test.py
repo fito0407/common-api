@@ -29,3 +29,9 @@ print(f"02. Adjusted Rand Index (vs ground truth): {ari:.3f}")
 
 ari= fm.ari_clusterings_replenish_pred(clustering_true, short_clustering_pred, good_order)
 print(f"03. Adjusted Rand Index (vs ground truth): {ari:.3f}")
+
+text= "<div><p>on a mission to help businesses provide perfect customer experiences.</p>"
+cleaned_text= fu.clean_html(text)
+
+
+a=1

@@ -43,7 +43,6 @@ def ari_clusterings_replenish_pred(clustering_true, clustering_pred, element_ord
     answer = _ari_clusterings(clustering_true, transformed_clustering_pred, element_order)
     return answer
 
-
 def _ari_clusterings(clustering_true, clustering_pred, element_order):
     labels_true = clustering_to_labels(clustering_true, element_order)
     labels_pred = clustering_to_labels(clustering_pred, element_order)
