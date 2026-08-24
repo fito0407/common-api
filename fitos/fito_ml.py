@@ -1,6 +1,9 @@
 from sklearn import metrics
 import pandas as pd
 from collections import Counter
+import threading
+from fastembed import TextEmbedding
+import numpy as np
 
 def clustering_to_labels(clustering, element_order):
     element_to_cluster = {}
@@ -79,3 +82,37 @@ def _validate_duplicates(list_elements):
         return False, f'Cannot have repeated elements. Duplicates found: {duplicates}'
 
     return True, ''
+
+class Query_embedder():
+    def __init__(self,model_name = "BAAI/bge-small-en-v1.5", dim = 384, query_instruction = "Represent this sentence for searching relevant passages: ") :
+        self.model_name= model_name
+        self.dim= dim
+        self.query_instruction= query_instruction
+
+        self.model = None
+        self.model_lock = threading.Lock()
+
+    def _get_model(self):
+        if self.model is None:
+            with self.model_lock:
+                if self.model is None:
+                    _model = TextEmbedding(model_name= self.model_name)
+        return _model
+
+    def _normalise(self, vec):
+        # Unit-length vectors for cosine similarity (vector_cosine_ops / <=>).
+        v = np.asarray(vec, dtype=np.float32)
+        norm = np.linalg.norm(v)
+        return v / norm if norm > 0 else v
+
+    def embed_text(self,texts):
+        # For stored documents (titles, bodies). Long bodies are truncated to the
+        # model's max length by fastembed — a known v1 limitation, documented.
+        model = self._get_model()
+        return [self._normalise(v) for v in model.embed(list(texts))]
+
+    def embed_query(self,text):
+        # For a search query: prepend the bge query instruction, return one vector.
+        model = self._get_model()
+        vec = next(iter(model.embed([self.query_instruction + text])))
+        return self._normalise(vec)
