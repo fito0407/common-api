@@ -2,3 +2,4 @@ Werkzeug~=3.1.4
 scikit-learn
 pandas
 html.parser
+tqdm
