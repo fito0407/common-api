@@ -35,7 +35,7 @@ import fitos.fito_ml as fm
 
 
 query_embedder = fm.Query_embedder()
-response_text= query_embedder.embed_text("bla")
+response_text= query_embedder.embed_text(["bla"])
 response_query= query_embedder.embed_query("bla")
 
 a=1

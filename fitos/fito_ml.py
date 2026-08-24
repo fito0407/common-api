@@ -95,9 +95,9 @@ class Query_embedder():
     def _get_model(self):
         if self.model is None:
             with self.model_lock:
-                if self.model is None:
-                    _model = TextEmbedding(model_name= self.model_name)
-        return _model
+                self.model = TextEmbedding(model_name= self.model_name)
+
+        return self.model
 
     def _normalise(self, vec):
         # Unit-length vectors for cosine similarity (vector_cosine_ops / <=>).
